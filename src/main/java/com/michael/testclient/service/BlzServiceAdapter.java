@@ -1,21 +1,15 @@
 package com.michael.testclient.service;
 
-import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.soap.*;
 import org.json.JSONObject;
+import org.json.XML;
 import org.oorsprong.websamples.CountryCurrency;
 import org.oorsprong.websamples.CountryCurrencyResponse;
 import org.oorsprong.websamples.TCurrency;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
-
-import org.json.XML;
-import org.springframework.ws.soap.SoapEnvelope;
-import org.w3c.dom.Node;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,17 +23,14 @@ public class BlzServiceAdapter extends WebServiceGatewaySupport {
     String resultCountryDetails = "m:CountryCurrencyResponse";
 
 
-    @Autowired
-    RestTemplate restTemplate = new RestTemplate();
-
-    public CountryCurrencyResponse getCurrencyDetails(String url, CountryCurrency request) throws Exception {
+    public CountryCurrencyResponse getCurrencyDetails(String url, CountryCurrency request) {
 
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.TEXT_XML);
 
        CountryCurrencyResponse rest = new CountryCurrencyResponse();
 
-        String soapEndpointUrl = "http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso";
+        String soapEndpointUrl = url;
         String soapAction = "";
 
         rest = callSoapWebService(soapEndpointUrl, soapAction, request.getSCountryISOCode());
@@ -74,7 +65,7 @@ public class BlzServiceAdapter extends WebServiceGatewaySupport {
         return response;
     }
 
-    private CountryCurrencyResponse processResult(SOAPMessage soapResponse) throws JAXBException, SOAPException, IOException {
+    private CountryCurrencyResponse processResult(SOAPMessage soapResponse) throws SOAPException, IOException {
         CountryCurrencyResponse countryCurrencyResponse = new CountryCurrencyResponse();
 
 
@@ -87,7 +78,7 @@ public class BlzServiceAdapter extends WebServiceGatewaySupport {
             JSONObject jsonObj = XML.toJSONObject(strMsg);
 
 
-            System.out.println(jsonObj.toString());
+            System.out.println(jsonObj);
             JSONObject body = jsonObj.getJSONObject(soapEnvelop).getJSONObject(soapBody)
                     .getJSONObject(resultCountryDetails);
 

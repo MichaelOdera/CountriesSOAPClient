@@ -19,12 +19,10 @@ public class BlzController {
     BlzServiceAdapter blzServiceAdapter;
 
     @PostMapping("name")
-    public CountryCurrencyResponse sum(@RequestBody CountryRequest countryRequest) throws Exception {
-//        ObjectFactory objectFactory = new ObjectFactory();
-        System.out.println("My bank code >>>> "+ countryRequest.getCode());
+    public CountryCurrencyResponse sum(@RequestBody CountryRequest countryRequest) {
+        System.out.println("My country code >>>> "+ countryRequest.getCode());
         CountryCurrency type = new CountryCurrency();
         type.setSCountryISOCode(countryRequest.getCode());
-        CountryCurrencyResponse response =  blzServiceAdapter.getCurrencyDetails("http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso", type);
-        return response;
+        return blzServiceAdapter.getCurrencyDetails("http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso", type);
     }
 }
