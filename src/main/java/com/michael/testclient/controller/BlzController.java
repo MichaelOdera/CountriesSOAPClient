@@ -20,7 +20,6 @@ public class BlzController {
 
     @PostMapping("name")
     public CountryCurrencyResponse sum(@RequestBody CountryRequest countryRequest) {
-        System.out.println("My country code >>>> "+ countryRequest.getCode());
         CountryCurrency type = new CountryCurrency();
         type.setSCountryISOCode(countryRequest.getCode());
         return blzServiceAdapter.getCurrencyDetails("http://webservices.oorsprong.org/websamples.countryinfo/CountryInfoService.wso", type);
